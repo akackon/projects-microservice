@@ -48,8 +48,8 @@ public class ProjectController {
     @ApiOperation("delete project")
     @DeleteMapping("/project/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteProject(@PathVariable String id) {
-        Publisher.sendMessage(String.format("project with id = %s deleted [DELETE]", id));
+    public void deleteProject(@PathVariable int id) {
+        Publisher.sendMessage(String.format("project with id = %d deleted [DELETE]", id));
         projectService.deleteProject(id);
     }
 
@@ -57,20 +57,20 @@ public class ProjectController {
     @ApiOperation("update existing project")
     @PutMapping("/project/update/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updateProjectRecord(@PathVariable String id, @RequestBody Project project) {
+    public void updateProjectRecord(@PathVariable int id, @RequestBody Project project) {
         Project projectToUpdate = projectService.getProjectById(id);
         projectToUpdate.setProject_name(project.getProject_name());
         projectToUpdate.setDescription(project.getDescription());
         projectService.updateProject(projectToUpdate);
-        Publisher.sendMessage(String.format("project with id = %s, name = '%s' updated [UPDATE]", projectToUpdate.getProject_id(), project.getProject_name()));
+        Publisher.sendMessage(String.format("project with id = %d, name = '%s' updated [UPDATE]", projectToUpdate.getProject_id(), project.getProject_name()));
     }
 
 
     @ApiOperation("get project by id")
     @GetMapping("/project/search/id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Project getProjectById(@PathVariable String id) {
-        Publisher.sendMessage(String.format("Project with id = %s [ACCESS]", id));
+    public Project getProjectById(@PathVariable int id) {
+        Publisher.sendMessage(String.format("Project with id = %d [ACCESS]", id));
        return projectService.getProjectById(id);
     }
 }

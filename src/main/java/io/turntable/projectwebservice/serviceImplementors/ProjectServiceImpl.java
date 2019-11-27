@@ -56,10 +56,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void deleteProject(String projectId) {
-        int pId = Integer.parseInt(projectId);
-        jdbcTemplate.update("delete from projects where project_id = ?", new Object[]{pId});
-        System.out.println("project with id = " + pId + " deleted successfully");
+    public void deleteProject(int projectId) {
+        jdbcTemplate.update("delete from projects where project_id = ?", new Object[]{projectId});
+        System.out.println("project with id = " + projectId + " deleted successfully");
     }
 
     @Override
@@ -74,13 +73,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project getProjectById(String id) {
-        if (Integer.parseInt(id) < 1) {
+    public Project getProjectById(int id) {
+        if (id < 1) {
             log.warn("invalid project id access: " + id);
         }
-        int intId = Integer.parseInt(id);
         Project project = jdbcTemplate.queryForObject("select * from projects where project_id = ?",
-                new Object[]{intId},
+                new Object[]{id},
                 BeanPropertyRowMapper.newInstance(Project.class)
         );
         System.out.println("accessed project id = " + id);

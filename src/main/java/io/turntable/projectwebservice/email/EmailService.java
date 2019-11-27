@@ -2,7 +2,7 @@ package io.turntable.projectwebservice.email;
 
 import org.springframework.mail.SimpleMailMessage;
 
-public class EmaillService {
+public class EmailService {
 
     public void sendEmail() {
         SimpleMailMessage message = new SimpleMailMessage();

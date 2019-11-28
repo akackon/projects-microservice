@@ -77,6 +77,7 @@ public class ProjectController {
 
 
 
+//TODO : consider email service & undoing deleted project
 
 /*
 * NB

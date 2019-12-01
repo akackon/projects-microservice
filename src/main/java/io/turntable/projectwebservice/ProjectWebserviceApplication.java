@@ -13,12 +13,14 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.swing.text.html.Option;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 @SpringBootApplication
 public class ProjectWebserviceApplication {
 
+    private Object lock = new Object();
 //	public static void main(String[] args) {
 //		SpringApplication.run(ProjectWebserviceApplication.class, args);
 //		Sub.receiveMessage();
@@ -71,11 +74,13 @@ public class ProjectWebserviceApplication {
                 case "1":
                     Thread getProjectThread = new Thread(() -> {
                         List<Project> projects = projectService.getAllProjects();
+
 //                        System.out.println(projectService.getAllProjects());
                         List<Integer> ids = projects.stream().map(e -> e.getProject_id()).collect(Collectors.toList());
                         List<String> names = projects.stream().map(e -> e.getProject_name()).collect(Collectors.toList());
                         List<String> descs = projects.stream().map(e -> e.getDescription()).collect(Collectors.toList());
-                        System.out.println(ids);
+//                        System.out.println(ids);
+
                         for (int i = 0; i < ids.size(); i++) {
                             try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
                             System.out.println("*****************************************");
@@ -85,10 +90,36 @@ public class ProjectWebserviceApplication {
                             System.out.println("*****************************************");
                         }
                     }, "retrieveProjectThread");
+
                     getProjectThread.start();
                     try {getProjectThread.join();} catch (InterruptedException e) {e.printStackTrace();}
                     break;
 
+                case  "2":
+                    System.out.println("Which project would you like to search for ? :) ");
+                    userInput = sn.nextLine().toLowerCase();
+                    List<Project> projectsByNameSearch = projectService.getProjectByName(userInput);
+                    if (projectsByNameSearch.isEmpty()) {
+                        System.out.printf("Sorry...Invalid project name: %s", userInput);
+                    }
+                    else {
+                        List<Integer> ids = projectsByNameSearch.stream().map(e -> e.getProject_id()).collect(Collectors.toList());
+                        List<String> names = projectsByNameSearch.stream().map(e -> e.getProject_name()).collect(Collectors.toList());
+                        List<String> descs = projectsByNameSearch.stream().map(e -> e.getDescription()).collect(Collectors.toList());
+
+                    for (int i = 0; i < ids.size(); i++) {
+                        try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+                        System.out.println("*****************************************");
+                        System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + ids.get(i) + AnsiConsole.RESET);
+                        System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + names.get(i) + AnsiConsole.RESET);
+                        System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + descs.get(i) + AnsiConsole.RESET);
+                        System.out.println("*****************************************");
+                    }
+
+                    }
+
+
+                        break;
                 case "5":
                     System.out.println("Exiting...");
                     System.exit(0);

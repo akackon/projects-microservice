@@ -39,11 +39,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Optional<List<Project>> getProjectByName(String productName) {
+    public List<Project> getProjectByName(String productName) {
         log.info("searching project by name");
-        Optional<List<Project>> projects = Optional.ofNullable(jdbcTemplate.query("select * from projects where project_name like ?",
+        List<Project> projects = jdbcTemplate.query("select * from projects where project_name like ?",
                 new Object[]{"%" + productName.toLowerCase() + "%"},
-                BeanPropertyRowMapper.newInstance(Project.class)));
+                BeanPropertyRowMapper.newInstance(Project.class));
         return projects;
     }
 

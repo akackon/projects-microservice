@@ -7,7 +7,8 @@ import java.util.Optional;
 
 public interface ProjectService {
     List<Project> getAllProjects();
-    Optional<List<Project>> getProjectByName(String productName);
+//    Optional<List<Project>> getProjectByName(String productName);
+    List<Project> getProjectByName(String productName);
     Project getProjectById(int id);
     void deleteProject(int productID);
     void addProject(Project project);

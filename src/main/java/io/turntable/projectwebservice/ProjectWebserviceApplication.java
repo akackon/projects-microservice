@@ -115,16 +115,13 @@ public class ProjectWebserviceApplication {
                         System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + descs.get(i) + AnsiConsole.RESET);
                         System.out.println("*****************************************");
                     }
-
                     }
-
-
                         break;
                 case "5":
                     System.out.println("Exiting...");
                     System.exit(0);
                 default:
-                    System.out.println("Invalid option");
+                    System.out.println("Invalid option: " + userInput);
 
             }
         }

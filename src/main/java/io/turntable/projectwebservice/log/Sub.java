@@ -3,18 +3,21 @@ package io.turntable.projectwebservice.log;
 import io.turntable.projectwebservice.ProjectWebserviceApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 /*
  * log only listing to message
  * */
 
+@Component
 public class Sub {
     // logging the entire activity of the app
     public static final Logger logger = LoggerFactory
             .getLogger(ProjectWebserviceApplication.class);
 
-    public static void receiveMessage() {
+//    public static void receiveMessage() {
+    public void receiveMessage() {
         Jedis jedisSubscriber = new Jedis("localhost");
         // logging anytime listens
         jedisSubscriber.subscribe(new JedisPubSub() {

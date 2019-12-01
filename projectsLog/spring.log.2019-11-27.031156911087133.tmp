@@ -1,0 +1,14 @@
+2019-11-29 17:07:17.438 ERROR 16378 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 1996 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 1996 or configure this application to listen on another port.
+

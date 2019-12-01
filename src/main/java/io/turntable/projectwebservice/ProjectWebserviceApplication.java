@@ -59,7 +59,10 @@ public class ProjectWebserviceApplication {
         String userInput;
 
         while (true) {
-            System.out.println("\n##############\t Enter Option \t##################");
+            System.out.println("****************************************************");
+            System.out.println("*******************    Welcome    ******************");
+            System.out.println("****************************************************");
+            System.out.println("\n##############\t Menu Option \t##################");
             System.out.println("##\t 1. View all projects");
             System.out.println("##\t 2. Search project");
             System.out.println("##\t 3. Add new project");
@@ -128,7 +131,7 @@ public class ProjectWebserviceApplication {
                     newProject.setDescription(projectDesc);
                     projectService.addProject(newProject);
                     System.out.println(AnsiConsole.GREEN + "Project added successfully" + AnsiConsole.RESET);
-
+                    break;
 
                 case "5":
                     System.out.println("Exiting...");

@@ -184,6 +184,27 @@ public class ProjectWebserviceApplication {
                     break;
 
                 case "4":
+                    System.out.println("Enter project id to update: ");
+                    int idUserInput = sn.nextInt();
+                    Project projectToUpdate = projectService.getProjectById(idUserInput);
+                    System.out.println("*****************************************");
+                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectToUpdate.getProject_id() + AnsiConsole.RESET);
+                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + projectToUpdate.getProject_name() + AnsiConsole.RESET);
+                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectToUpdate.getDescription() + AnsiConsole.RESET);
+                    System.out.println("*****************************************\n\n");
+
+                    System.out.println("Enter new project name? ");
+                    String projectNameUpdate = sn.nextLine().toLowerCase();
+                    System.out.println("Enter project description? ");
+                    String projectDescUpdate = sn.nextLine().toLowerCase();
+
+                    projectToUpdate.setProject_name(projectNameUpdate);
+                    projectToUpdate.setDescription(projectDescUpdate);
+
+                    projectService.updateProject(projectToUpdate);
+                    System.out.println(AnsiConsole.GREEN + "Project with id=" + idUserInput + " updated successfully" + AnsiConsole.RESET);
+
+                    break;
 
 
                 case "5":

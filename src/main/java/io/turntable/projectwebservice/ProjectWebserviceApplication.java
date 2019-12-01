@@ -186,6 +186,7 @@ public class ProjectWebserviceApplication {
                 case "4":
                     System.out.println("Enter project id to update: ");
                     int idUserInput = sn.nextInt();
+
                     Project projectToUpdate = projectService.getProjectById(idUserInput);
                     System.out.println("*****************************************");
                     System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectToUpdate.getProject_id() + AnsiConsole.RESET);
@@ -193,21 +194,52 @@ public class ProjectWebserviceApplication {
                     System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectToUpdate.getDescription() + AnsiConsole.RESET);
                     System.out.println("*****************************************\n\n");
 
+                    Scanner inp = new Scanner(System.in);
                     System.out.println("Enter new project name? ");
-                    String projectNameUpdate = sn.nextLine().toLowerCase();
+                    String projNmUpt = inp.nextLine().toLowerCase();
+//                    String projectNameUpdate = sn.nextLine().toLowerCase();
                     System.out.println("Enter project description? ");
-                    String projectDescUpdate = sn.nextLine().toLowerCase();
+//                    String projectDescUpdate = sn.nextLine().toLowerCase();
+                    String projDecUpt = inp.nextLine();
 
-                    projectToUpdate.setProject_name(projectNameUpdate);
-                    projectToUpdate.setDescription(projectDescUpdate);
+                    projectToUpdate.setProject_name(projNmUpt);
+                    projectToUpdate.setDescription(projDecUpt);
 
                     projectService.updateProject(projectToUpdate);
-                    System.out.println(AnsiConsole.GREEN + "Project with id=" + idUserInput + " updated successfully" + AnsiConsole.RESET);
+                    System.out.println("******************* updated **********************");
+                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectToUpdate.getProject_id() + AnsiConsole.RESET);
+                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + projectToUpdate.getProject_name() + AnsiConsole.RESET);
+                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectToUpdate.getDescription() + AnsiConsole.RESET);
+                    System.out.println("*************************************************");
+                    System.out.println(AnsiConsole.GREEN + "Project with id=" + idUserInput + " updated successfully\n" + AnsiConsole.RESET);
 
                     break;
 
-
                 case "5":
+                    System.out.println("Enter project id to be deleted");
+                    int delIdUserInput =  new Scanner(System.in).nextInt();
+
+                    Project projectToDel = projectService.getProjectById(delIdUserInput);
+                    System.out.println("*****************************************");
+                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectToDel.getProject_id() + AnsiConsole.RESET);
+                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + projectToDel.getProject_name() + AnsiConsole.RESET);
+                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectToDel.getDescription() + AnsiConsole.RESET);
+                    System.out.println("*****************************************\n\n");
+
+                    System.out.println("Are you sure you want to delete ? (y/n)");
+                    String respond = new Scanner(System.in).nextLine();
+
+                    if(respond == "y"){
+                        projectService.deleteProject(delIdUserInput);
+                    } else if (respond == "n") {
+                        break;
+                    }
+                    else {
+                        System.out.println("Invalid option: " + respond);
+                        break;
+                    }
+
+                case "6":
                     System.out.println("Exiting...");
                     System.exit(0);
                 default:

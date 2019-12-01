@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableSwagger2
-@SpringBootApplication
+//@EnableSwagger2
+//@SpringBootApplication
 public class ProjectWebserviceApplication {
 
 	public static void main(String[] args) {

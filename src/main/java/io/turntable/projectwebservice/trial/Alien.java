@@ -3,12 +3,12 @@ package io.turntable.projectwebservice.trial;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class Alien {
     private int aId;
     private String name;
     private String tech;
-    @Autowired
+//    @Autowired
     private Laptop laptop;
 
     public Alien() {

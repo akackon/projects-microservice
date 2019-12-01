@@ -2,7 +2,7 @@ package io.turntable.projectwebservice.trial;
 
 import org.springframework.stereotype.Component;
 
-@Component      // for object creation and autowiring
+//@Component      // for object creation and autowiring
 public class Laptop {
     private int lId;
     private String brand;

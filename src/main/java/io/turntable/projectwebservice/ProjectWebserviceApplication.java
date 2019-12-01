@@ -62,8 +62,8 @@ public class ProjectWebserviceApplication {
             System.out.println("\n##############\t Enter Option \t##################");
             System.out.println("##\t 1. View all projects");
             System.out.println("##\t 2. Search project");
-            System.out.println("##\t 3. Delete project");
-            System.out.println("##\t 4. Add new project");
+            System.out.println("##\t 3. Add new project");
+            System.out.println("##\t 4. Delete project");
             System.out.println("##\t 5. Quit this Application");
             System.out.println("####################################################");
 
@@ -96,7 +96,7 @@ public class ProjectWebserviceApplication {
                     break;
 
                 case  "2":
-                    System.out.println("Which project would you like to search for ? :) ");
+                    System.out.println("Enter project name to search for ? :) ");
                     userInput = sn.nextLine().toLowerCase();
                     List<Project> projectsByNameSearch = projectService.getProjectByName(userInput);
                     if (projectsByNameSearch.isEmpty()) {
@@ -117,6 +117,19 @@ public class ProjectWebserviceApplication {
                     }
                     }
                         break;
+
+                case "3":
+                    System.out.println("Enter project name? ");
+                    String projectName = sn.nextLine().toLowerCase();
+                    System.out.println("Enter project description? ");
+                    String projectDesc = sn.nextLine().toLowerCase();
+                    Project newProject = new Project();
+                    newProject.setProject_name(projectName);
+                    newProject.setDescription(projectDesc);
+                    projectService.addProject(newProject);
+                    System.out.println(AnsiConsole.GREEN + "Project added successfully" + AnsiConsole.RESET);
+
+
                 case "5":
                     System.out.println("Exiting...");
                     System.exit(0);

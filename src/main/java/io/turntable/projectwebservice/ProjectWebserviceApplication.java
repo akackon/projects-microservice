@@ -145,9 +145,13 @@ public class ProjectWebserviceApplication {
 
                             // threading....
                             AtomicReference<Project> projectSearchById;
-                            Thread searchByIdThread = new Thread(()-> projectSearchById.set(projectService.getProjectById(idSearchUserInput)));
+                            Thread searchByIdThread = new Thread(() -> projectSearchById.set(projectService.getProjectById(idSearchUserInput)));
                             searchByIdThread.start();
-                            try {searchByIdThread.join();} catch (InterruptedException e) {e.printStackTrace();}
+                            try {
+                                searchByIdThread.join();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
 
                             if (projectSearchById.get() == null) {
                                 System.out.printf("Sorry...Invalid project name: %s", mainMenuUserInput);
@@ -169,20 +173,29 @@ public class ProjectWebserviceApplication {
                     break;
                 case "3":
                     Thread addProjThread = new Thread(() -> {
+                        System.out.println(Thread.currentThread().getName() + " running");
                         System.out.println("Enter project name? ");
                         String projectName = sn.nextLine().toLowerCase();
                         System.out.println("Enter project description? ");
                         String projectDesc = sn.nextLine().toLowerCase();
-                        try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         Project newProject = new Project();
                         newProject.setProject_name(projectName);
                         newProject.setDescription(projectDesc);
                         projectService.addProject(newProject);
                         System.out.println(AnsiConsole.GREEN + "Project added successfully" + AnsiConsole.RESET);
-                    });
+                    }, "add project thread");
                     addProjThread.start();
 //                    Thread.sleep(2000);
-                    try {addProjThread.join();} catch (InterruptedException e) {e.printStackTrace();}
+                    try {
+                        addProjThread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
                     break;
 
@@ -204,17 +217,22 @@ public class ProjectWebserviceApplication {
                     System.out.println("Enter project description? ");
 //                    String projectDescUpdate = sn.nextLine().toLowerCase();
                     String projDecUpt = inp.nextLine();
+                    Thread projectUpdateThread = new Thread(() -> {
+                        try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+                        projectToUpdate.setProject_name(projNmUpt);
+                        projectToUpdate.setDescription(projDecUpt);
 
-                    projectToUpdate.setProject_name(projNmUpt);
-                    projectToUpdate.setDescription(projDecUpt);
-
-                    projectService.updateProject(projectToUpdate);
-                    System.out.println("******************* updated **********************");
-                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectToUpdate.getProject_id() + AnsiConsole.RESET);
-                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + projectToUpdate.getProject_name() + AnsiConsole.RESET);
-                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectToUpdate.getDescription() + AnsiConsole.RESET);
-                    System.out.println("*************************************************");
-                    System.out.println(AnsiConsole.GREEN + "Project with id=" + idUserInput + " updated successfully\n" + AnsiConsole.RESET);
+                        projectService.updateProject(projectToUpdate);
+                        System.out.println("******************* updated **********************");
+                        System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectToUpdate.getProject_id() + AnsiConsole.RESET);
+                        System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + projectToUpdate.getProject_name() + AnsiConsole.RESET);
+                        System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectToUpdate.getDescription() + AnsiConsole.RESET);
+                        System.out.println("*************************************************");
+                        System.out.println(AnsiConsole.GREEN + "Project with id=" + idUserInput + " updated successfully\n" + AnsiConsole.RESET);
+                    }, "project update thread");
+                    projectUpdateThread.start();
+                    System.out.println(Thread.currentThread().getName() + " is running");
+                    try {projectUpdateThread.join();} catch (InterruptedException e) {e.printStackTrace();}
 
                     break;
 

@@ -251,21 +251,25 @@ public class ProjectWebserviceApplication {
                     String respond = new Scanner(System.in).nextLine().toLowerCase();
 
                     System.out.println("respond: " + respond);
-                    switch (respond) {
-                        case "yes":
-                        case "y":
-                            System.out.println("...inside yes option");
-                            projectService.deleteProject(delIdUserInput);
-                            System.out.println(AnsiConsole.GREEN + "Project with id=" + delIdUserInput + " deleted successfully\n" + AnsiConsole.RESET);
-                            System.out.println();
-                            break;
-                        case "n":
-                        case "no":
-                            break;
-                        default:
-                            System.out.println("Invalid option: " + respond);
-                    }
-
+                    Thread deleteChoiceThread = new Thread(() -> {
+                        try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
+                        switch (respond) {
+                            case "yes":
+                            case "y":
+                                System.out.println("...inside yes option");
+                                projectService.deleteProject(delIdUserInput);
+                                System.out.println(AnsiConsole.GREEN + "Project with id=" + delIdUserInput + " deleted successfully\n" + AnsiConsole.RESET);
+                                System.out.println();
+                                break;
+                            case "n":
+                            case "no":
+                                break;
+                            default:
+                                System.out.println("Invalid option: " + respond);
+                        }
+                    }, "delete thread");
+                    deleteChoiceThread.start();
+                    try {deleteChoiceThread.join();} catch (InterruptedException e) {e.printStackTrace();}
                     break;
                 case "6":
                     System.out.println("Exiting program...");

@@ -161,7 +161,7 @@ public class ProjectWebserviceApplication {
                                 System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectSearchById.getProject_id() + AnsiConsole.RESET);
                                 System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + projectSearchById.getProject_name() + AnsiConsole.RESET);
                                 System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectSearchById.getDescription() + AnsiConsole.RESET);
-                                System.out.println("*****************************************\n\n");
+                                System.out.println("*****************************************\n");
                             }
                             break;
                         default:
@@ -192,7 +192,7 @@ public class ProjectWebserviceApplication {
                     System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectToUpdate.getProject_id() + AnsiConsole.RESET);
                     System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + projectToUpdate.getProject_name() + AnsiConsole.RESET);
                     System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectToUpdate.getDescription() + AnsiConsole.RESET);
-                    System.out.println("*****************************************\n\n");
+                    System.out.println("*****************************************\n");
 
                     Scanner inp = new Scanner(System.in);
                     System.out.println("Enter new project name? ");
@@ -224,23 +224,25 @@ public class ProjectWebserviceApplication {
                     System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectToDel.getProject_id() + AnsiConsole.RESET);
                     System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + projectToDel.getProject_name() + AnsiConsole.RESET);
                     System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectToDel.getDescription() + AnsiConsole.RESET);
-                    System.out.println("*****************************************\n\n");
+                    System.out.println("********************************************\n");
 
                     System.out.println(AnsiConsole.RED + "Are you sure you want to delete ? (y/n)" + AnsiConsole.RESET);
-                    String respond = new Scanner(System.in).nextLine();
+                    String respond = new Scanner(System.in).nextLine().toLowerCase();
 
-                    if(respond == "y"){
+                    System.out.println("respond: " + respond);
+                    if(respond == "y" | respond == "yes"){
+                        System.out.println("...inside y option");
                         projectService.deleteProject(delIdUserInput);
                         System.out.println(AnsiConsole.GREEN + "Project with id=" + delIdUserInput + " deleted successfully\n" + AnsiConsole.RESET);
                         System.out.println();
-                    } else if (respond == "n") {
+                    } else if (respond == "n" | respond == "no") {
                         break;
                     }
                     else {
                         System.out.println("Invalid option: " + respond);
                         continue;
                     }
-
+                    break;
                 case "6":
                     System.out.println("Exiting program...");
                     System.exit(0);

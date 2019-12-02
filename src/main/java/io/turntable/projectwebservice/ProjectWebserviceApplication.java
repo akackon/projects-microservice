@@ -226,21 +226,23 @@ public class ProjectWebserviceApplication {
                     System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectToDel.getDescription() + AnsiConsole.RESET);
                     System.out.println("*****************************************\n\n");
 
-                    System.out.println("Are you sure you want to delete ? (y/n)");
+                    System.out.println(AnsiConsole.RED + "Are you sure you want to delete ? (y/n)" + AnsiConsole.RESET);
                     String respond = new Scanner(System.in).nextLine();
 
                     if(respond == "y"){
                         projectService.deleteProject(delIdUserInput);
+                        System.out.println(AnsiConsole.GREEN + "Project with id=" + delIdUserInput + " deleted successfully\n" + AnsiConsole.RESET);
+                        System.out.println();
                     } else if (respond == "n") {
                         break;
                     }
                     else {
                         System.out.println("Invalid option: " + respond);
-                        break;
+                        continue;
                     }
 
                 case "6":
-                    System.out.println("Exiting...");
+                    System.out.println("Exiting program...");
                     System.exit(0);
                 default:
                     System.out.println("Invalid option: " + mainMenuUserInput);

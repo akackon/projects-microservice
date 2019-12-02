@@ -2,26 +2,17 @@ package io.turntable.projectwebservice;
 
 //import io.turntable.projectwebservice.log.Sub;
 
-import io.turntable.projectwebservice.controllers.ProjectController;
 import io.turntable.projectwebservice.log.Sub;
 import io.turntable.projectwebservice.models.Project;
 import io.turntable.projectwebservice.serviceImplementors.ProjectServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import javax.swing.text.html.Option;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.Charset;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @EnableSwagger2
@@ -151,16 +142,21 @@ public class ProjectWebserviceApplication {
                             System.out.println("Enter project id to search for ");
                             int idSearchUserInput = sn.nextInt();
 //                            if(idSearchUserInput){}
-                            Project projectSearchById = projectService.getProjectById(idSearchUserInput);
 
-                            if (projectSearchById == null) {
+                            // threading....
+                            AtomicReference<Project> projectSearchById;
+                            Thread searchByIdThread = new Thread(()-> projectSearchById.set(projectService.getProjectById(idSearchUserInput)));
+                            searchByIdThread.start();
+                            try {searchByIdThread.join();} catch (InterruptedException e) {e.printStackTrace();}
+
+                            if (projectSearchById.get() == null) {
                                 System.out.printf("Sorry...Invalid project name: %s", mainMenuUserInput);
                             } else {
 //                                try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
                                 System.out.println("*****************************************");
-                                System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectSearchById.getProject_id() + AnsiConsole.RESET);
-                                System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + projectSearchById.getProject_name() + AnsiConsole.RESET);
-                                System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectSearchById.getDescription() + AnsiConsole.RESET);
+                                System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectSearchById.get().getProject_id() + AnsiConsole.RESET);
+                                System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + projectSearchById.get().getProject_name() + AnsiConsole.RESET);
+                                System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectSearchById.get().getDescription() + AnsiConsole.RESET);
                                 System.out.println("*****************************************\n");
                             }
                             break;
@@ -172,15 +168,22 @@ public class ProjectWebserviceApplication {
 
                     break;
                 case "3":
-                    System.out.println("Enter project name? ");
-                    String projectName = sn.nextLine().toLowerCase();
-                    System.out.println("Enter project description? ");
-                    String projectDesc = sn.nextLine().toLowerCase();
-                    Project newProject = new Project();
-                    newProject.setProject_name(projectName);
-                    newProject.setDescription(projectDesc);
-                    projectService.addProject(newProject);
-                    System.out.println(AnsiConsole.GREEN + "Project added successfully" + AnsiConsole.RESET);
+                    Thread addProjThread = new Thread(() -> {
+                        System.out.println("Enter project name? ");
+                        String projectName = sn.nextLine().toLowerCase();
+                        System.out.println("Enter project description? ");
+                        String projectDesc = sn.nextLine().toLowerCase();
+                        try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
+                        Project newProject = new Project();
+                        newProject.setProject_name(projectName);
+                        newProject.setDescription(projectDesc);
+                        projectService.addProject(newProject);
+                        System.out.println(AnsiConsole.GREEN + "Project added successfully" + AnsiConsole.RESET);
+                    });
+                    addProjThread.start();
+//                    Thread.sleep(2000);
+                    try {addProjThread.join();} catch (InterruptedException e) {e.printStackTrace();}
+
                     break;
 
                 case "4":

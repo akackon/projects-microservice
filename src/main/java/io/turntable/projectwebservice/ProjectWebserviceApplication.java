@@ -37,7 +37,7 @@ public class ProjectWebserviceApplication {
 //	}
 
 
-    // with cli ui
+    // CLI UI
     public static void main(String[] args) {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(ProjectWebserviceApplication.class, args);
         ProjectServiceImpl projectService = applicationContext.getBean(ProjectServiceImpl.class);
@@ -283,3 +283,5 @@ public class ProjectWebserviceApplication {
 
 
 //TODO: convert to function calls
+//TODO: refactoring
+

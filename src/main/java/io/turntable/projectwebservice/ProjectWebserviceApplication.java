@@ -144,33 +144,28 @@ public class ProjectWebserviceApplication {
 //                            if(idSearchUserInput){}
 
                             // threading....
-                            AtomicReference<Project> projectSearchById;
-                            Thread searchByIdThread = new Thread(() -> projectSearchById.set(projectService.getProjectById(idSearchUserInput)));
+                            Thread searchByIdThread = new Thread(() -> {
+                                Project projectSearchById = projectService.getProjectById(idSearchUserInput);
+                                if (projectSearchById == null) {
+                                    System.out.printf("Sorry...Invalid project name: %s", idSearchUserInput);
+                                } else {
+                                try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+                                    System.out.println("*****************************************");
+                                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectSearchById.getProject_id() + AnsiConsole.RESET);
+                                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + projectSearchById.getProject_name() + AnsiConsole.RESET);
+                                    System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectSearchById.getDescription() + AnsiConsole.RESET);
+                                    System.out.println("*****************************************\n");
+                                }
+                            });
                             searchByIdThread.start();
-                            try {
-                                searchByIdThread.join();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-                            if (projectSearchById.get() == null) {
-                                System.out.printf("Sorry...Invalid project name: %s", mainMenuUserInput);
-                            } else {
-//                                try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
-                                System.out.println("*****************************************");
-                                System.out.println(AnsiConsole.WHITE_BOLD + "\tProject id:   " + AnsiConsole.RESET + AnsiConsole.YELLOW + projectSearchById.get().getProject_id() + AnsiConsole.RESET);
-                                System.out.println(AnsiConsole.WHITE_BOLD + "\tProject name: " + AnsiConsole.RESET + AnsiConsole.GREEN + projectSearchById.get().getProject_name() + AnsiConsole.RESET);
-                                System.out.println(AnsiConsole.WHITE_BOLD + "\tProject desc: " + AnsiConsole.RESET + AnsiConsole.BLUE + projectSearchById.get().getDescription() + AnsiConsole.RESET);
-                                System.out.println("*****************************************\n");
-                            }
+                            try {searchByIdThread.join();} catch (InterruptedException e) {e.printStackTrace();}
                             break;
                         default:
                             System.out.println("Invalid option: " + searchChoiceUserInput);
                             break;
-
                     }
-
                     break;
+
                 case "3":
                     Thread addProjThread = new Thread(() -> {
                         System.out.println(Thread.currentThread().getName() + " running");
@@ -196,7 +191,6 @@ public class ProjectWebserviceApplication {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
                     break;
 
                 case "4":
@@ -217,6 +211,7 @@ public class ProjectWebserviceApplication {
                     System.out.println("Enter project description? ");
 //                    String projectDescUpdate = sn.nextLine().toLowerCase();
                     String projDecUpt = inp.nextLine();
+
                     Thread projectUpdateThread = new Thread(() -> {
                         try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
                         projectToUpdate.setProject_name(projNmUpt);
@@ -284,3 +279,6 @@ public class ProjectWebserviceApplication {
 
 
 }
+
+
+//TODO: convert to function calls

@@ -217,7 +217,7 @@ public class ProjectWebserviceApplication {
 
                 case "5":
                     System.out.println("Enter project id to be deleted");
-                    int delIdUserInput =  new Scanner(System.in).nextInt();
+                    int delIdUserInput = new Scanner(System.in).nextInt();
 
                     Project projectToDel = projectService.getProjectById(delIdUserInput);
                     System.out.println("*****************************************");
@@ -230,18 +230,21 @@ public class ProjectWebserviceApplication {
                     String respond = new Scanner(System.in).nextLine().toLowerCase();
 
                     System.out.println("respond: " + respond);
-                    if(respond == "y" | respond == "yes"){
-                        System.out.println("...inside y option");
-                        projectService.deleteProject(delIdUserInput);
-                        System.out.println(AnsiConsole.GREEN + "Project with id=" + delIdUserInput + " deleted successfully\n" + AnsiConsole.RESET);
-                        System.out.println();
-                    } else if (respond == "n" | respond == "no") {
-                        break;
+                    switch (respond) {
+                        case "yes":
+                        case "y":
+                            System.out.println("...inside yes option");
+                            projectService.deleteProject(delIdUserInput);
+                            System.out.println(AnsiConsole.GREEN + "Project with id=" + delIdUserInput + " deleted successfully\n" + AnsiConsole.RESET);
+                            System.out.println();
+                            break;
+                        case "n":
+                        case "no":
+                            break;
+                        default:
+                            System.out.println("Invalid option: " + respond);
                     }
-                    else {
-                        System.out.println("Invalid option: " + respond);
-                        continue;
-                    }
+
                     break;
                 case "6":
                     System.out.println("Exiting program...");

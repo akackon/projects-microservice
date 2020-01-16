@@ -41,6 +41,7 @@ public class ProjectController {
         projectService.addProject(project);
     }
 
+
     @CrossOrigin
     @ApiOperation("delete project")
     @DeleteMapping("/project/delete/{id}")
@@ -67,6 +68,13 @@ public class ProjectController {
     public Project getProjectById(@PathVariable String id) {
        return projectService.getProjectById(id);
     }
+
+    @GetMapping("/docker")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public String testDocker() {
+        return "Docker works!! :)";
+    }
+
 }
 
 

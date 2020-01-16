@@ -1,5 +1,6 @@
 FROM adoptopenjdk:11-jre-hotspot
 
-COPY build/libs/project-webservice-0.0.1-SNAPSHOT.jar project-webservice.jar
-RUN chmod 777 project-webservice.jar
-ENTRYPOINT ["java","-jar", "project-webservice.jar"]
+ADD build/libs/project-webservice-0.0.1-SNAPSHOT.jar app.jar
+EXPOSE 5000
+RUN chmod 777 app.jar
+ENTRYPOINT ["java","-jar", "app.jar"]

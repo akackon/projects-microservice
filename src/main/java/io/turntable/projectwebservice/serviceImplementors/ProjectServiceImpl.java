@@ -78,6 +78,7 @@ public class ProjectServiceImpl implements ProjectService {
                 return project;
     }
 
+
     public String getDocker(Tracer tracer){
         Span childSpan = tracer.spanBuilder("bar").startSpan();
             childSpan.setAttribute("operation.id", 222);

@@ -1,8 +1,17 @@
 package io.turntable.projectwebservice.controllers;
 
+import io.grpc.ManagedChannelBuilder;
+import io.opentelemetry.context.Scope;
+import io.opentelemetry.exporters.jaeger.JaegerGrpcSpanExporter;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.trace.SpanProcessor;
+import io.opentelemetry.sdk.trace.export.SimpleSpansProcessor;
+import io.opentelemetry.trace.Span;
+import io.opentelemetry.trace.Tracer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.turntable.projectwebservice.Models.Project;
+import io.turntable.projectwebservice.configurations.OTConfig;
 import io.turntable.projectwebservice.serviceImplementors.ProjectServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Api
 @RestController
@@ -69,12 +79,72 @@ public class ProjectController {
        return projectService.getProjectById(id);
     }
 
-    @GetMapping("/docker")
+    @GetMapping("api/v1/docker")
     @ResponseStatus(value = HttpStatus.CREATED)
     public String testDocker() {
-        return "Docker works!! :)";
+        SpanProcessor spanProcessor = OTConfig.spanConfig();
+        Tracer tracer = OTConfig.observabilityConfig(spanProcessor);
+
+        Span span = tracer.spanBuilder("foo").startSpan();
+        span.setAttribute("operation.id", 111);
+        span.addEvent("operation.111");
+
+        try (Scope scope = tracer.withSpan(span))
+        {
+            return projectService.getDocker(tracer);
+        } finally {
+            span.end();
+            spanProcessor.shutdown();
+        }
     }
 
+
+
+//    ---------------------------------------------------------
+//@GetMapping("api/v1/docker")
+//@ResponseStatus(value = HttpStatus.CREATED)
+//public String testDocker() {
+//    SpanProcessor spanProcessor = OTConfig.spanConfig();
+//    Tracer tracer = OTConfig.observabilityConfig(spanProcessor);
+//
+//    // Add a single Span.
+//    Span span = tracer.spanBuilder("foo").startSpan();
+//    span.setAttribute("operation.id", 111);
+//    span.addEvent("operation.111");
+//
+//    // Set it as the current Span.
+//    try (Scope scope = tracer.withSpan(span))   // same span closed at finally
+//    {
+//        // Add another Span, as an implicit child.
+//        Span childSpan = tracer.spanBuilder("bar").startSpan();
+//        childSpan.setAttribute("operation.id", 222);
+//        childSpan.addEvent("operation.222");
+//
+//        try (Scope childScope = tracer.withSpan(childSpan)) {
+//            Span childChildSpan = tracer.spanBuilder("goo").startSpan();
+//            childChildSpan.setAttribute("operation.id", 333);
+//            childChildSpan.addEvent("operation.333");
+//
+//            try(Scope childChildScope = tracer.withSpan(childChildSpan)) {
+//                Span babyChild = tracer.spanBuilder("hoo").startSpan();
+//                babyChild.setAttribute("operation.id", 444);
+//                babyChild.addEvent("operation.444");
+//            }finally {
+//                childChildSpan.end();
+//            }
+//
+//
+//        } finally {
+//            childSpan.end();
+//
+//        }
+//
+//    } finally {
+//        span.end();
+//    }
+//    spanProcessor.shutdown();
+//    return projectService.getDocker();
+//}
 }
 
 

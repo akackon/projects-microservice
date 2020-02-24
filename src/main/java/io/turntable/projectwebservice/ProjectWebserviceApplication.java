@@ -14,7 +14,7 @@ public class ProjectWebserviceApplication {
 		SpringApplication.run(ProjectWebserviceApplication.class, args);
 	}
 
-	@Bean
+	@Bean // applied at method-level
 	public ProjectServiceImpl getProjectService(){
 		return new ProjectServiceImpl();
 	}

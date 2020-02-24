@@ -1,5 +1,7 @@
 package io.turntable.projectwebservice.serviceImplementors;
 
+import io.opentelemetry.trace.Span;
+import io.opentelemetry.trace.Tracer;
 import io.turntable.projectwebservice.Models.Project;
 import io.turntable.projectwebservice.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Optional<List<Project>> getProjectByName(String productName) {
-        Optional<List<Project>> projects = Optional.ofNullable(jdbcTemplate.query("select * from projects where project_name like ?",
+        Optional<List<Project>> projects = Optional.of(jdbcTemplate.query("select * from projects where project_name like ?",
                 new Object[]{"%" + productName.toLowerCase() + "%"},
                 BeanPropertyRowMapper.newInstance(Project.class)));
         return projects;
@@ -74,6 +76,14 @@ public class ProjectServiceImpl implements ProjectService {
         );
         System.out.println("got project id = " + id + " successfully");
                 return project;
+    }
+
+    public String getDocker(Tracer tracer){
+        Span childSpan = tracer.spanBuilder("bar").startSpan();
+            childSpan.setAttribute("operation.id", 222);
+            childSpan.addEvent("operation.222");
+        childSpan.end();
+        return "Hey from docker :)";
     }
 }
 
